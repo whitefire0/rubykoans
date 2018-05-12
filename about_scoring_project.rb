@@ -30,8 +30,69 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # Your goal is to write the score method.
 
 def score(dice)
-  # You need to write this method
+  score = 0
+  # if dice.empty? then return score end
+  # initialise counter hash
+  counter = Hash.new
+
+  i = 1
+  while i <= dice.length
+    # determine array position of current dice value
+    array_index = i - 1
+
+    # and select hash key from current dice value
+    key = dice[array_index].to_s
+
+    # create hash key if it doesn't exist
+    counter[key] || counter[key] = 0
+
+    # increment corresponding hash key to count
+    counter[key] += 1
+    i += 1
+  end
+
+  # after creating counting hash, tally scores
+  counter.each do |key, value|
+    remainder = 0
+    three_or_more = value >= 3 ? true : false
+    # add set scores
+    if three_or_more
+      remainder = value % 3
+      counter[key] -= 3
+      if key == '1'
+        score += 1000
+      else
+        score += key.to_i * 100
+      end
+    end
+    # add remainder from sets to score
+    if remainder > 0
+      if key == '1'
+        score += remainder * 100
+      elsif key == '5'
+        score += remainder * 50
+      end
+      counter[key] -= remainder
+    elsif counter[key] > 0
+      if key == '1'
+        score += key.to_i * 100 * counter[key]
+      elsif key == '5'
+        score += key.to_i * 10 * counter[key]
+      end
+    end
+  end
+  
+  score
 end
+
+
+
+# alternative solutions
+# create a hash that stores the value as a key, and the value as a counter (more elegant?)
+# store in an array using the value as position
+# use native array methods to count identical dice and score
+# use native array methods to remove counted dice from remaining array
+# use modulo to determine sets and then additional scores of same number
 
 class AboutScoringProject < Neo::Koan
   def test_score_of_an_empty_list_is_zero
