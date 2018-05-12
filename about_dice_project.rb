@@ -12,15 +12,10 @@ class DiceSet
   end
 
   def roll(n)
+    initialize
     n.times{ |n| @values << rand(1..6) }
   end
 end
-
-
-
-    # set = Array.new
-    # n.times{ set << rand(1..6) }
-    # set
 
 class AboutDiceProject < Neo::Koan
   def test_can_create_a_dice_set
