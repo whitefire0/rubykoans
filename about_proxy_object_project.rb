@@ -27,7 +27,8 @@ class Proxy
       @messages.push method_name
       # call method
       @object.send method_name, *args
-    # else raise NoMethodError
+    else 
+      # raise NoMethodError
       super(method_name, *args, &block)
     end
   end
